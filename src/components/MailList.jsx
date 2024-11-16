@@ -5,6 +5,7 @@ import { MailStatuscontext } from "../context/mailStatusContext";
 
 const MailList = ({ showMailDetail }) => {
   const [AllMail, SetAllMail] = useState([]);
+  const [page, setPage] = useState(1);
   const [isActive, setIsActive] = useState({
     unread: true,
     read: false,
@@ -28,13 +29,15 @@ const MailList = ({ showMailDetail }) => {
 
       SetAllMail([...favoriteMails]);
     }
-  }, [isActive]);
+  }, [isActive, page]);
 
   const getAllMails = async () => {
-    const data = await fetch("https://flipkart-email-mock.vercel.app/");
+    const data = await fetch(
+      `https://flipkart-email-mock.vercel.app/?page=${page}`
+    );
     const respdata = await data.json();
     SetAllMail([...respdata.list]);
-    totalmailref.current = data.totaL;
+    totalmailref.current = respdata.total;
 
     setMailStatus({ ...mailStatus, unread: [...respdata.list] });
   };
@@ -51,8 +54,37 @@ const MailList = ({ showMailDetail }) => {
     }
   };
 
+  const handlepagination = (key) => {
+    setPage((prevpage) => prevpage + key);
+  };
+
+  console.log("totalmailref", totalmailref);
   return (
     <div style={{ width: showMailDetail ? "30%" : "100%" }}>
+      <div
+        style={{
+          justifyContent: "flex-end",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          marginRight: "12px",
+        }}
+      >
+        <span>
+          {10 * page - 10 + 1 + "-" + Math.min(totalmailref.current, 10 * page)}{" "}
+          of {totalmailref.current}
+        </span>
+
+        <button onClick={() => handlepagination(-1)} disabled={page === 1}>
+          prev
+        </button>
+        <button
+          onClick={() => handlepagination(+1)}
+          disabled={page * 10 > totalmailref.current}
+        >
+          next
+        </button>
+      </div>
       <div style={{ padding: "10px " }}>
         <span>Filter By:</span>
 

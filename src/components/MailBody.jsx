@@ -11,8 +11,9 @@ const MailBody = () => {
       style={{
         width: "90vw",
         height: "auto",
+        minHeight: "80vh",
         margin: "auto",
-        border: "1px solid red",
+
         display: "flex",
         backgroundColor: "#F4F5F9",
         padding: "20px",
