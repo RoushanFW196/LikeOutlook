@@ -3,20 +3,37 @@ import React, { useContext } from "react";
 import "../styles/onemailstyle.css";
 import { MailContext } from "../context/mailcontext";
 import NameBox from "./NameBox";
+import { MailStatuscontext } from "../context/mailStatusContext";
 
-const OneMailComponent = ({ item, markFavorite }) => {
+const OneMailComponent = ({ item, markFavorite, mailType, allfavorite }) => {
   const date = dayjs(item.date).format("DD-MM-YYYY hh:mm a");
-
   const { setMailDetails, MailDetails } = useContext(MailContext);
-
+  const { mailStatus, setMailStatus } = useContext(MailStatuscontext);
   const handleclick = () => {
     setMailDetails({ mailItemDetails: { ...item }, showDetails: true });
+    let _readmail = mailStatus.read;
+    _readmail.push(item);
+    let _unreadmail = mailStatus.unread;
+
+    _unreadmail = _unreadmail.filter((el) => el.id != item.id);
+
+    setMailStatus({
+      ...mailStatus,
+      read: [..._readmail],
+      unread: [..._unreadmail],
+    });
   };
 
   return (
-    <div className="onemail-container" onClick={handleclick}>
+    <div
+      className="onemail-container"
+      onClick={handleclick}
+      style={{
+        backgroundColor:
+          item?.id === MailDetails?.mailItemDetails?.id ? "#F2F2F2" : "#CFD2DC",
+      }}
+    >
       <NameBox name={item.from.name} />
-
       <div style={{ paddingBottom: "13px" }}>
         <p>
           From:{item.from.name} {"<" + item.from.email + ">"} <br />
@@ -33,7 +50,7 @@ const OneMailComponent = ({ item, markFavorite }) => {
           {item.short_description}
         </p>
         <span>{date}</span>{" "}
-        {markFavorite && (
+        {(allfavorite || markFavorite) && (
           <span
             style={{
               color: "#E54065",

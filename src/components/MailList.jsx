@@ -1,46 +1,94 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import OneMailComponent from "./OneMailComponent";
 import { MailContext } from "../context/mailcontext";
+import { MailStatuscontext } from "../context/mailStatusContext";
 
 const MailList = ({ showMailDetail }) => {
   const [AllMail, SetAllMail] = useState([]);
+  const [isActive, setIsActive] = useState({
+    unread: true,
+    read: false,
+    favorite: false,
+  });
+
   const totalmailref = useRef(0);
 
   const { setMailDetails, MailDetails } = useContext(MailContext);
+  const { mailStatus, setMailStatus } = useContext(MailStatuscontext);
 
   useEffect(() => {
-    getAllMails();
-  }, []);
+    if (isActive.unread) {
+      getAllMails();
+    } else if (isActive.read) {
+      let readMails = [...mailStatus.read];
+
+      SetAllMail([...readMails]);
+    } else if (isActive.favorite) {
+      let favoriteMails = [...mailStatus.favorite];
+
+      SetAllMail([...favoriteMails]);
+    }
+  }, [isActive]);
+
   const getAllMails = async () => {
     const data = await fetch("https://flipkart-email-mock.vercel.app/");
     const respdata = await data.json();
-
     SetAllMail([...respdata.list]);
     totalmailref.current = data.totaL;
+
+    setMailStatus({ ...mailStatus, unread: [...respdata.list] });
+  };
+
+  const handleMailStatus = (type) => {
+    setIsActive({ ...isActive, [type]: true });
+
+    if (type === "read") {
+      setIsActive({ ...isActive, unread: false, read: true, favorite: false });
+    } else if (type === "unread") {
+      setIsActive({ ...isActive, unread: true, read: false, favorite: false });
+    } else if (type === "favorite") {
+      setIsActive({ ...isActive, unread: false, read: false, favorite: true });
+    }
   };
 
   return (
     <div style={{ width: showMailDetail ? "30%" : "100%" }}>
       <div style={{ padding: "10px " }}>
         <span>Filter By:</span>
-        <span style={{ margin: "0px 10px" }}>Unread</span>
+
         <span
+          onClick={() => handleMailStatus("unread")}
+          style={{ margin: "0px 10px" }}
+          className={isActive.unread ? "activemailstatus" : ""}
+        >
+          Unread
+        </span>
+        <span
+          onClick={() => handleMailStatus("read")}
           style={{
             margin: "0px 10px",
-            backgroundColor: "#CFD2DC",
-            borderRadius: "15px",
-            padding: "5px 15px ",
           }}
+          className={isActive.read ? "activemailstatus" : ""}
         >
           Read
         </span>
-        <span style={{ margin: "0px 10px" }}>Favourite</span>
+        <span
+          onClick={() => handleMailStatus("favorite")}
+          style={{ margin: "0px 10px" }}
+          className={isActive.favorite ? "activemailstatus" : ""}
+        >
+          Favourite
+        </span>
       </div>
 
       {AllMail.map((el) => (
         <OneMailComponent
           item={el}
           key={el.id}
+          mailType={
+            isActive.read ? "read" : isActive.favorite ? "favorite" : "unread"
+          }
+          allfavorite={isActive.favorite && AllMail.length > 0}
           markFavorite={
             MailDetails.mailItemDetails.id === el.id && MailDetails.markFavorite
           }

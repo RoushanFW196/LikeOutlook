@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import NameBox from "./NameBox";
 import dayjs from "dayjs";
 import { MailContext } from "../context/mailcontext";
+import { MailStatuscontext } from "../context/mailStatusContext";
 
 const MailDetail = ({ items, id }) => {
   const [maildetails, setMailDetail] = useState({});
   const date = dayjs(items.date).format("DD-MM-YYYY hh:mm a");
 
   const { setMailDetails } = useContext(MailContext);
-
+  const { mailStatus, setMailStatus } = useContext(MailStatuscontext);
   useEffect(() => {
     if (id) {
       getMailDetail(id);
@@ -29,6 +30,10 @@ const MailDetail = ({ items, id }) => {
       showDetails: true,
       markFavorite: true,
     });
+
+    let _favoritemail = [...mailStatus.favorite];
+    _favoritemail.push(items);
+    setMailStatus({ ...mailStatus, favorite: [..._favoritemail] });
   };
 
   return (
@@ -69,7 +74,6 @@ const MailDetail = ({ items, id }) => {
           onClick={handleMarkFavorite}
           style={{
             backgroundColor: "#E54065",
-            padding: "10px 20px",
             color: "white",
             padding: "5px 20px",
             borderRadius: "15px",

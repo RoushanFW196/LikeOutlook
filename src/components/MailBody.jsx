@@ -4,8 +4,6 @@ import MailDetail from "./MailDetail";
 import { MailContext } from "../context/mailcontext";
 
 const MailBody = () => {
-  const [showMailDetail, setshowMailDetail] = useState(false);
-
   const { MailDetails, setMailDetails } = useContext(MailContext);
 
   return (
@@ -20,7 +18,9 @@ const MailBody = () => {
         padding: "20px",
       }}
     >
-      <MailList showMailDetail={showMailDetail} />
+      <MailList
+        showMailDetail={MailDetails?.mailItemDetails?.id ? true : false}
+      />
       {MailDetails?.showDetails && (
         <MailDetail
           items={MailDetails.mailItemDetails}
