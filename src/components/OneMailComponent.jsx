@@ -10,12 +10,13 @@ const OneMailComponent = ({ item, markFavorite, mailType, allfavorite }) => {
   const { setMailDetails, MailDetails } = useContext(MailContext);
   const { mailStatus, setMailStatus } = useContext(MailStatuscontext);
   const handleclick = () => {
-    setMailDetails({ mailItemDetails: { ...item }, showDetails: true });
+    let _item={...item, unread:false};
+    setMailDetails({ mailItemDetails: { ..._item }, showDetails: true });
     let _readmail = mailStatus.read;
-    _readmail.push(item);
+    _readmail.push(_item);
     let _unreadmail = mailStatus.unread;
 
-    _unreadmail = _unreadmail.filter((el) => el.id != item.id);
+    _unreadmail = _unreadmail.filter((el) => el.id != _item.id);
 
     setMailStatus({
       ...mailStatus,
@@ -23,6 +24,8 @@ const OneMailComponent = ({ item, markFavorite, mailType, allfavorite }) => {
       unread: [..._unreadmail],
     });
   };
+
+
 
   return (
     <div

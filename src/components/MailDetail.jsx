@@ -26,13 +26,13 @@ const MailDetail = ({ items, id }) => {
 
   const handleMarkFavorite = () => {
     setMailDetails({
-      mailItemDetails: { ...items },
+      mailItemDetails: { ...items, unread:false },
       showDetails: true,
       markFavorite: true,
     });
 
     let _favoritemail = [...mailStatus.favorite];
-    _favoritemail.push(items);
+    _favoritemail.push({...items, unread:false});
     setMailStatus({ ...mailStatus, favorite: [..._favoritemail] });
   };
 
@@ -44,7 +44,7 @@ const MailDetail = ({ items, id }) => {
         border: "1px solid #CFD2DC",
         backgroundColor: "#ffffff",
         padding: "20px",
-        marginTop: "64px",
+        marginTop: "87px",
         borderRadius: "8px",
       }}
     >

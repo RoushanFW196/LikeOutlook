@@ -22,7 +22,6 @@ const MailList = ({ showMailDetail }) => {
       getAllMails();
     } else if (isActive.read) {
       let readMails = [...mailStatus.read];
-
       SetAllMail([...readMails]);
     } else if (isActive.favorite) {
       let favoriteMails = [...mailStatus.favorite];
@@ -36,15 +35,16 @@ const MailList = ({ showMailDetail }) => {
       `https://flipkart-email-mock.vercel.app/?page=${page}`
     );
     const respdata = await data.json();
-    SetAllMail([...respdata.list]);
-    totalmailref.current = respdata.total;
+    let unreadmail = respdata.list.map((el) => ({ ...el, unread: true }));
 
+    SetAllMail([...unreadmail]);
+    totalmailref.current = respdata.total;
     setMailStatus({ ...mailStatus, unread: [...respdata.list] });
   };
 
+  console.log("allmail", AllMail);
   const handleMailStatus = (type) => {
     setIsActive({ ...isActive, [type]: true });
-
     if (type === "read") {
       setIsActive({ ...isActive, unread: false, read: true, favorite: false });
     } else if (type === "unread") {
