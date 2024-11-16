@@ -6,14 +6,7 @@ import { MailContext } from "../context/mailcontext";
 const MailBody = () => {
   const [showMailDetail, setshowMailDetail] = useState(false);
 
-
-  const {showMailDetails, setShowMailDetails } = useContext(MailContext);
-
-
-
-     console.log('showMailDetails', showMailDetails)
-
-
+  const { MailDetails, setMailDetails } = useContext(MailContext);
 
   return (
     <div
@@ -28,7 +21,12 @@ const MailBody = () => {
       }}
     >
       <MailList showMailDetail={showMailDetail} />
-      {showMailDetail && <MailDetail id={3} />}
+      {MailDetails?.showDetails && (
+        <MailDetail
+          items={MailDetails.mailItemDetails}
+          id={MailDetails.mailItemDetails.id}
+        />
+      )}
     </div>
   );
 };

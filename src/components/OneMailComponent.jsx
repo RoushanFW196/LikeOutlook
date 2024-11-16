@@ -2,21 +2,22 @@ import dayjs from "dayjs";
 import React, { useContext } from "react";
 import "../styles/onemailstyle.css";
 import { MailContext } from "../context/mailcontext";
+import NameBox from "./NameBox";
 
-const OneMailComponent = ({ item }) => {
+const OneMailComponent = ({ item, markFavorite }) => {
   const date = dayjs(item.date).format("DD-MM-YYYY hh:mm a");
 
-  const { setShowMailDetails } = useContext(MailContext);
-  console.log("mailcontext, ", mailcontext);
+  const { setMailDetails, MailDetails } = useContext(MailContext);
+
   const handleclick = () => {
-    console.log("item", item);
-    setShowMailDetails({ ...item });
+    setMailDetails({ mailItemDetails: { ...item }, showDetails: true });
   };
 
   return (
     <div className="onemail-container" onClick={handleclick}>
-      <p>{item.from.name.toUpperCase()[0]}</p>
-      <div>
+      <NameBox name={item.from.name} />
+
+      <div style={{ paddingBottom: "13px" }}>
         <p>
           From:{item.from.name} {"<" + item.from.email + ">"} <br />
           Subject:{item.subject}
@@ -31,7 +32,19 @@ const OneMailComponent = ({ item }) => {
         >
           {item.short_description}
         </p>
-        <p>{date}</p>
+        <span>{date}</span>{" "}
+        {markFavorite && (
+          <span
+            style={{
+              color: "#E54065",
+              marginLeft: "20px",
+              fontSize: "15px",
+              fontWeight: "bold",
+            }}
+          >
+            Favorite
+          </span>
+        )}
       </div>
     </div>
   );

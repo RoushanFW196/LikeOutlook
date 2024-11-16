@@ -1,9 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import OneMailComponent from "./OneMailComponent";
+import { MailContext } from "../context/mailcontext";
 
 const MailList = ({ showMailDetail }) => {
   const [AllMail, SetAllMail] = useState([]);
   const totalmailref = useRef(0);
+
+  const { setMailDetails, MailDetails } = useContext(MailContext);
+
   useEffect(() => {
     getAllMails();
   }, []);
@@ -15,7 +19,6 @@ const MailList = ({ showMailDetail }) => {
     totalmailref.current = data.totaL;
   };
 
-  console.log("AllMail", AllMail);
   return (
     <div style={{ width: showMailDetail ? "30%" : "100%" }}>
       <div style={{ padding: "10px " }}>
@@ -35,7 +38,13 @@ const MailList = ({ showMailDetail }) => {
       </div>
 
       {AllMail.map((el) => (
-        <OneMailComponent item={el} key={el.id} />
+        <OneMailComponent
+          item={el}
+          key={el.id}
+          markFavorite={
+            MailDetails.mailItemDetails.id === el.id && MailDetails.markFavorite
+          }
+        />
       ))}
     </div>
   );
