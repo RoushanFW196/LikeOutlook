@@ -37,7 +37,7 @@ const MailDetail = ({ items, id }) => {
   };
 
   return (
-    <div className="w-[70%] h-auto border border-[#CFD2DC] bg-white p-5 mt-[92px] mb-[18px] rounded-lg">
+    <div className="w-[70%] h-auto border border-[#CFD2DC] bg-white p-5 mt-[106px] mb-[18px] rounded-lg">
       <div className="flex justify-between items-center">
         <div className="flex justify-between items-start gap-4">
           <NameBox name={items.from.name} />
