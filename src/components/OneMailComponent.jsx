@@ -5,7 +5,7 @@ import { MailContext } from "../context/mailcontext";
 import NameBox from "./NameBox";
 import { MailStatuscontext } from "../context/mailStatusContext";
 
-const OneMailComponent = ({ item, markFavorite, mailType, allfavorite }) => {
+const OneMailComponent = ({ item, markFavorite, mailType, allFavorite }) => {
   const date = dayjs(item.date).format("DD-MM-YYYY hh:mm a");
   const { setMailDetails, MailDetails } = useContext(MailContext);
   const { mailStatus, setMailStatus } = useContext(MailStatuscontext);
@@ -23,8 +23,8 @@ const OneMailComponent = ({ item, markFavorite, mailType, allfavorite }) => {
 
   return (
     <div
-      className={`onemail-container bg-${
-        item?.id === MailDetails?.mailItemDetails?.id ? "#F2F2F2" : "#CFD2DC"
+      className={`onemail-container ${
+        item?.id === MailDetails?.mailItemDetails?.id ? "selected" : "default"
       }`}
       onClick={handleclick}
     >
@@ -47,7 +47,7 @@ const OneMailComponent = ({ item, markFavorite, mailType, allfavorite }) => {
           {item.short_description}
         </p>
         <span className="font-medium">{date}</span>{" "}
-        {(allfavorite || markFavorite) && (
+        {(allFavorite || markFavorite) && (
           <span className="text-[#E54065] ml-12 text-sm font-bold">
             Favorite
           </span>
