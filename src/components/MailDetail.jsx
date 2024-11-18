@@ -26,72 +26,38 @@ const MailDetail = ({ items, id }) => {
 
   const handleMarkFavorite = () => {
     setMailDetails({
-      mailItemDetails: { ...items, unread:false },
+      mailItemDetails: { ...items, unread: false },
       showDetails: true,
       markFavorite: true,
     });
 
     let _favoritemail = [...mailStatus.favorite];
-    _favoritemail.push({...items, unread:false});
+    _favoritemail.push({ ...items, unread: false });
     setMailStatus({ ...mailStatus, favorite: [..._favoritemail] });
   };
 
   return (
-    <div
-      style={{
-        width: "70%",
-        height: "auto",
-        border: "1px solid #CFD2DC",
-        backgroundColor: "#ffffff",
-        padding: "20px",
-        marginTop: "87px",
-        borderRadius: "8px",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            gap: "15px",
-          }}
-        >
+    <div className="w-[70%] h-auto border border-[#CFD2DC] bg-white p-5 mt-[92px] mb-[18px] rounded-lg">
+      <div className="flex justify-between items-center">
+        <div className="flex justify-between items-start gap-4">
           <NameBox name={items.from.name} />
-          <div style={{ lineHeight: "0.5" }}>
-            <h3>{items.from.name}</h3>
-            <p style={{ fontSize: "13px" }}>{date}</p>
+          <div className="mt-[20px]">
+            <h4 className="text-lg font-bold tracking-wider text-[#636363] capitalize">
+              {items.from.name}
+            </h4>
+            <p className="text-sm">{date}</p>
           </div>
         </div>
 
         <button
           onClick={handleMarkFavorite}
-          style={{
-            backgroundColor: "#E54065",
-            color: "white",
-            padding: "5px 20px",
-            borderRadius: "15px",
-            color: "white",
-            cursor: "pointer",
-          }}
+          className="bg-[#E54065] px-2 py-1 cursor-pointer text-[white] rounded-lg"
         >
           Mark as favorite
         </button>
       </div>
 
-      <div
-        style={{
-          margin: "10px 20px",
-          padding: "10px",
-          backgroundColor: "F2F2F2",
-        }}
-      >
+      <div className="mx-5 my-3 p-3 ">
         <div dangerouslySetInnerHTML={{ __html: maildetails.body }}></div>
       </div>
     </div>

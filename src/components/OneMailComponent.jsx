@@ -10,58 +10,45 @@ const OneMailComponent = ({ item, markFavorite, mailType, allfavorite }) => {
   const { setMailDetails, MailDetails } = useContext(MailContext);
   const { mailStatus, setMailStatus } = useContext(MailStatuscontext);
   const handleclick = () => {
-    let _item={...item, unread:false};
+    let _item = { ...item, unread: false };
     setMailDetails({ mailItemDetails: { ..._item }, showDetails: true });
     let _readmail = mailStatus.read;
     _readmail.push(_item);
-    let _unreadmail = mailStatus.unread;
-
-    _unreadmail = _unreadmail.filter((el) => el.id != _item.id);
 
     setMailStatus({
       ...mailStatus,
       read: [..._readmail],
-      unread: [..._unreadmail],
     });
   };
 
-
-
   return (
     <div
-      className="onemail-container"
+      className={`onemail-container bg-${
+        item?.id === MailDetails?.mailItemDetails?.id ? "#F2F2F2" : "#CFD2DC"
+      }`}
       onClick={handleclick}
-      style={{
-        backgroundColor:
-          item?.id === MailDetails?.mailItemDetails?.id ? "#F2F2F2" : "#CFD2DC",
-      }}
     >
       <NameBox name={item.from.name} />
-      <div style={{ paddingBottom: "13px" }}>
-        <p>
-          From:{item.from.name} {"<" + item.from.email + ">"} <br />
-          Subject:{item.subject}
+      <div className="py-4">
+        <p className="text-sm my-1">
+          From: &nbsp;&nbsp;
+          <span className="font-medium decoration-indigo-500/30">
+            {" "}
+            {item.from.name} {"<" + item.from.email + ">"}
+          </span>{" "}
+          <br />
+          Subject:&nbsp;&nbsp;
+          <span className="font-medium decoration-indigo-500/30">
+            {" "}
+            {item.subject}
+          </span>
         </p>
-        <p
-          style={{
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            maxWidth: "250px",
-          }}
-        >
+        <p className="truncate max-w-64 decoration-gray-500/30 py-2 font-medium">
           {item.short_description}
         </p>
-        <span>{date}</span>{" "}
+        <span className="font-medium">{date}</span>{" "}
         {(allfavorite || markFavorite) && (
-          <span
-            style={{
-              color: "#E54065",
-              marginLeft: "20px",
-              fontSize: "15px",
-              fontWeight: "bold",
-            }}
-          >
+          <span className="text-[#E54065] ml-12 text-sm font-bold">
             Favorite
           </span>
         )}
